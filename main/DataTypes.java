@@ -5,33 +5,34 @@ import java.util.Scanner;
 
 public class DataTypes {
 
-    public static double askNum(String prompt){
+    public static Double askNum(String prompt) {
         /* helper method -- asks & validates user input */
         Scanner sc = new Scanner(System.in);
-        double num = 0;
-        boolean flag;
-        boolean print_flag = true;
+        Double num = 0d;
+        String test = "";
+        boolean shouldRun = true;
 
         do {
             try {
-                System.out.println(prompt);
-                num = sc.nextDouble();
+                System.out.print(prompt);
+                test = sc.nextLine();
+                num = Double.parseDouble(test);
 
-                if (num < 0) {
-                    print_flag = false;
+                if(num <= 0d){
                     System.out.println("Please enter a positive number:");
-                    throw new Exception();
+                    continue;
                 }
-                flag = true;
-            } catch (Exception e) {
-                if (print_flag) {
-                    System.out.println("Please enter a number:");
-                    System.out.println(prompt);
-                }
-                flag = false;
+
+                shouldRun = false;
+
+                return num;
+
+            } catch (Exception ex) {
+                System.out.println("Please enter a number");
             }
-        } while (!flag);
-        return num;
+        } while (shouldRun);
+
+        return null;
     }
 
     public static void askInt(Double kilometers, Double conversionFactor) {
@@ -51,26 +52,26 @@ public class DataTypes {
         }
     }
 
-    public static int multiplyNums(double num1, double num2){
+    public static int multiplyNums(double num1, double num2) {
         /* helper method -- multiplies two doubles and returns as integer */
-        return (int)((num1 * num2));
+        return (int) ((num1 * num2));
     }
 
-    public static void saveNumAsFile(double num, File fileName){
+    public static void saveNumAsFile(double num, File fileName) {
         /* helper method -- saves double to text file */
-        try{
+        try {
             FileWriter fw = new FileWriter(fileName);
             fw.write(String.valueOf(num));
             fw.close();
 
             // System.out.println("Successfully wrote to " + fileName);
-        } catch (IOException e){
+        } catch (IOException e) {
             System.out.println("An error occurred while writing to " + fileName);
             e.printStackTrace();
         }
     }
 
-    public static double readNumFile(File fileName){
+    public static double readNumFile(File fileName) {
         /* helper method -- reads & returns double from text file */
         double num = 0;
         try {
@@ -92,7 +93,7 @@ public class DataTypes {
         return num;
     }
 
-    public static void main (String[] args){
+    public static void main(String[] args) {
         // DataTypes dataTypes = new DataTypes();
         File file = new File("./conversion_factor.txt");
 
@@ -104,11 +105,11 @@ public class DataTypes {
         double num = readNumFile(file);
         double realConversionFactor = 0.62137119;
 
-        if (num != realConversionFactor){
+        if (num != realConversionFactor) {
             System.out.println("""
-                The entered kilometer to mile conversion factor is wrong. Would you like to:\s
-                1. continue anyways
-                2. use the real conversion factor""");
+                    The entered kilometer to mile conversion factor is wrong. Would you like to:\s
+                    1. continue anyways
+                    2. use the real conversion factor""");
             askInt(kilometers, num);
         } else {
             System.out.println(kilometers + " kilometers were entered, which is (circa) " + miles + " miles");
